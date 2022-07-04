@@ -1,0 +1,120 @@
+﻿@page "/"
+@using System.Net.Http;
+@using System.Net.Http.Json;
+@inject HttpClient http
+
+<h1>Tarefas</h1>
+<hr />
+
+@try
+{
+    @if ( _tarefas == null )
+    {
+        <p>Carregando...</p>
+    }
+    else if ( !_tarefas.Any() )
+    {
+        <p>Ainda não existem tarefas cadastradas...</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ação</th>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Concluída</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ( Tarefa item in _tarefas )
+                {
+                    <tr>
+                        <td><button @onclick="( () => RemoverTarefa( item.ID ) )" disabled=@item.Concluida><i class="oi oi-trash"></i></button></td>
+                        <td>@item.DataCriacao</td>
+                        <td>@item.Descricao</td>
+                        <td><input type="checkbox" @onclick="( () => AlterarEstadoTarefa( item.ID ) )" checked=@item.Concluida /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if ( _tarefas != null )
+    {
+        <div>
+            <label>Nova tarefa</label>
+            <br>
+            <input type="text" placeholder="Informe a tarefa" @bind="_novaTarefa">
+            <br>
+            <button class="btn btn-primary" @onclick="AdicionarNovaTarefa">Cadastrar tarefa</button>
+        </div>
+    }
+}
+catch ( Exception ex )
+{
+    <p>@ex.ToString()</p>
+}
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        _tarefas = await http.GetFromJsonAsync<List<Tarefa>>( "Dados/Tarefas.json" );
+    }
+
+    public class Tarefa
+    {
+        public Guid ID { get; set; }
+        public string Descricao { get; set; } = string.Empty;
+        public bool Concluida { get; set; }
+        public DateTime DataCriacao { get; set; }
+    }
+
+    private string _novaTarefa = string.Empty;
+    private List<Tarefa> _tarefas;
+
+    private void AdicionarNovaTarefa()
+    {
+        if ( !string.IsNullOrEmpty( _novaTarefa ) )
+        {
+            _tarefas.Add( new Tarefa()
+                {
+                    DataCriacao = DateTime.Now,
+                    Descricao = _novaTarefa,
+                    ID = Guid.NewGuid()
+                } );
+        }
+
+        _novaTarefa = string.Empty;
+    }
+
+    private void RemoverTarefa( Guid id )
+    {
+        Tarefa tarefa = _tarefas.First( tarefa => tarefa.ID == id );
+
+        if ( tarefa == null )
+        {
+            return;
+        }
+
+        if ( tarefa.Concluida )
+        {
+            return;
+        }
+
+        _tarefas.Remove( tarefa );
+    }
+
+    private void AlterarEstadoTarefa( Guid id )
+    {
+        Tarefa tarefa = _tarefas.First( tarefa => tarefa.ID == id );
+
+        if ( tarefa == null )
+        {
+            return;
+        }
+
+        tarefa.Concluida = !tarefa.Concluida;
+    }
+}

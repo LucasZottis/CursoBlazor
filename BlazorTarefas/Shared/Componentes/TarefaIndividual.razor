@@ -1,0 +1,15 @@
+﻿<td><button @onclick="( () => RemoverTarefaIndividual.InvokeAsync( Item ) )" disabled=@Item.Concluida><i class="oi oi-trash"></i></button></td>
+<td>@Item.DataCriacao</td>
+<td>@Item.Descricao</td>
+<td><input type="checkbox" @onclick="( () => AlterarEstadoTarefaIndividual.InvokeAsync( Item ) )" checked=@Item.Concluida /></td>
+
+@code {
+    [Parameter]
+    public Tarefa Item { get; set; }
+
+    [Parameter]
+    public EventCallback<Tarefa> RemoverTarefaIndividual { get; set; }
+
+    [Parameter]
+    public EventCallback<Tarefa> AlterarEstadoTarefaIndividual { get; set; }
+}

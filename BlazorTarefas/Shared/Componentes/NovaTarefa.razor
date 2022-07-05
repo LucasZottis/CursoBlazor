@@ -1,0 +1,17 @@
+﻿<div>
+    <label>Nova tarefa</label>
+    <br>
+    <input type="text" placeholder="Informe a tarefa" @bind="_novaTarefa">
+    <br>
+    <button class="btn btn-primary" @onclick="( () => AdicionarTarefa.InvokeAsync( _novaTarefa ) )">Cadastrar tarefa</button>
+</div>
+
+@code {
+    private string _novaTarefa = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> AdicionarTarefa { get; set; }
+
+    //[Parameter]
+    //public string DescricaoNovaTarefa { get; set; } = string.Empty;
+}

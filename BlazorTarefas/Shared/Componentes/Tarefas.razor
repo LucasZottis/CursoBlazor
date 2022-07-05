@@ -1,0 +1,84 @@
+﻿<h1>@Titulo</h1>
+
+@if ( ListaTarefas == null )
+{
+    <Alerta Mensagem=" Carregando..." TipoMensagem="TipoMensagem.Aviso"></Alerta>
+}
+else if ( !ListaTarefas.Any() )
+{
+    <Alerta Mensagem=" Ainda não existem tarefas cadastradas." TipoMensagem="TipoMensagem.Aviso"></Alerta>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ação</th>
+                <th>Data</th>
+                <th>Descrição</th>
+                <th>Concluída</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ( Tarefa item in ListaTarefas )
+            {
+                <tr>
+                    <TarefaIndividual Item="@item" RemoverTarefaIndividual="RemoverTarefa" AlterarEstadoTarefaIndividual="AlterarEstadoTarefa"></TarefaIndividual>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if ( ListaTarefas != null )
+{
+    <NovaTarefa AdicionarTarefa="AdicionarNovaTarefa"></NovaTarefa>
+}
+
+@code {
+    [Parameter]
+    public List<Tarefa> ListaTarefas { get; set; }
+
+    [Parameter]
+    public string Titulo { get; set; }
+
+    private void AdicionarNovaTarefa( string descricaoTarefa )
+    {
+        if ( !string.IsNullOrEmpty( descricaoTarefa ) )
+        {
+            ListaTarefas.Add( new Tarefa()
+                {
+                    DataCriacao = DateTime.Now,
+                    Descricao = descricaoTarefa,
+                    ID = Guid.NewGuid()
+                } );
+        }
+
+        descricaoTarefa = string.Empty;
+    }
+
+    private void RemoverTarefa( Tarefa tarefa )
+    {
+        if ( tarefa == null )
+        {
+            return;
+        }
+
+        if ( tarefa.Concluida )
+        {
+            return;
+        }
+
+        ListaTarefas.Remove( tarefa );
+    }
+
+    private void AlterarEstadoTarefa( Tarefa tarefa )
+    {
+        if ( tarefa == null )
+        {
+            return;
+        }
+
+        tarefa.Concluida = !tarefa.Concluida;
+    }
+}

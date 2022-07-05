@@ -1,0 +1,40 @@
+﻿@page "/"
+@implements IDisposable
+
+<h1>@Titulo</h1>
+<h2>Fui rendererizado as @HoraRenderizacao</h2>
+
+@code {
+    public string Titulo { get; set; }
+    public string HoraRenderizacao { get; set; }
+
+    protected override void OnInitialized()
+    {
+        //base.OnInitialized();
+        HoraRenderizacao = DateTime.Now.ToLongTimeString();
+        Console.WriteLine( $"Inicialização do componente: {HoraRenderizacao}" );
+        Titulo = "Olá Blazor";
+    }
+
+    protected override void OnParametersSet()
+    {
+        //base.OnParametersSet();
+        HoraRenderizacao = DateTime.Now.ToLongTimeString();
+        Console.WriteLine( $"Executei o OnParametersSet: {HoraRenderizacao}" );
+        Console.WriteLine( "--> Recebimento de parâmetros do componente pai." );
+    }
+
+    protected override void OnAfterRender( bool firstRender )
+    {
+        //base.OnAfterRender( firstRender );
+        HoraRenderizacao = DateTime.Now.ToLongTimeString();
+        Console.WriteLine( $"Executei o OnAfterRender: Primeira vez = {firstRender}" );
+        Console.WriteLine( $"--> Término da renderização do componente: {HoraRenderizacao}" );
+    }
+
+    public void Dispose()
+    {
+        HoraRenderizacao = DateTime.Now.ToLongTimeString();
+        Console.WriteLine( $"--> Liberação do componente: {HoraRenderizacao}" );
+    }
+}

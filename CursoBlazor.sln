@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorInjecaoDependencia", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorCodeBehind", "BlazorCodeBehind\BlazorCodeBehind.csproj", "{A3177251-588E-4CD4-A839-B03D305986D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorLayout", "BlazorLayout\BlazorLayout.csproj", "{7559F7DE-C0BE-49E4-96DE-0392397EF5BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{A3177251-588E-4CD4-A839-B03D305986D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3177251-588E-4CD4-A839-B03D305986D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3177251-588E-4CD4-A839-B03D305986D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7559F7DE-C0BE-49E4-96DE-0392397EF5BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7559F7DE-C0BE-49E4-96DE-0392397EF5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7559F7DE-C0BE-49E4-96DE-0392397EF5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7559F7DE-C0BE-49E4-96DE-0392397EF5BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

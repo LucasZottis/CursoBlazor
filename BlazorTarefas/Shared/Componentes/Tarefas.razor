@@ -1,4 +1,6 @@
-﻿<h1>@Titulo</h1>
+﻿@inject IJSRuntime js
+
+<h1>@Titulo</h1>
 
 @if ( ListaTarefas == null )
 {
@@ -32,17 +34,21 @@ else
 
 @if ( ListaTarefas != null )
 {
-    <NovaTarefa AdicionarTarefa="AdicionarNovaTarefa"></NovaTarefa>
+    <NovaTarefa AdicionarTarefa="AdicionarNovaTarefa" DescricaoNovaTarefa="_novaTarefa"></NovaTarefa>
 }
 
 @code {
+    private string _novaTarefa = "";
+
     [Parameter]
     public List<Tarefa> ListaTarefas { get; set; }
 
     [Parameter]
     public string Titulo { get; set; }
 
-    private void AdicionarNovaTarefa( string descricaoTarefa )
+    private static int totalTarefas = 0;
+
+    private async void AdicionarNovaTarefa( string descricaoTarefa )
     {
         if ( !string.IsNullOrEmpty( descricaoTarefa ) )
         {
@@ -52,12 +58,18 @@ else
                     Descricao = descricaoTarefa,
                     ID = Guid.NewGuid()
                 } );
+
+            _novaTarefa = "";
+            totalTarefas = ListaTarefas.Count;
+
+            //await js.InvokeVoidAsync( "getTotalTarefas" );
+            await js.InvokeVoidAsync( "getTotalTarefasInstancia", DotNetObjectReference.Create( this ) );
         }
 
         descricaoTarefa = string.Empty;
     }
 
-    private void RemoverTarefa( Tarefa tarefa )
+    private async Task RemoverTarefa( Tarefa tarefa )
     {
         if ( tarefa == null )
         {
@@ -69,7 +81,11 @@ else
             return;
         }
 
-        ListaTarefas.Remove( tarefa );
+        if ( ( ( IJSInProcessRuntime ) js ).Invoke<bool>( "confirm", "Deseja excluir a tarefa?" ) )
+        {
+            ListaTarefas.Remove( tarefa );
+            await js.InvokeAsync<object>( "MostraAlerta", "Tarefa excluída com sucesso!" );
+        }
     }
 
     private void AlterarEstadoTarefa( Tarefa tarefa )
@@ -80,5 +96,17 @@ else
         }
 
         tarefa.Concluida = !tarefa.Concluida;
+    }
+
+    [JSInvokable]
+    public Task<int> ObterTotalTarefasInstancia()
+    {
+        return Task.FromResult( totalTarefas );
+    }
+
+    [JSInvokable]
+    public static Task<int> ObterTotalTarefas()
+    {
+        return Task.FromResult( totalTarefas );
     }
 }

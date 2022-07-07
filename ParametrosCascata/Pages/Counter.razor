@@ -1,14 +1,36 @@
 ﻿@page "/counter"
 
-<body style="background: @configuracao.CorFundo;">
-    <PageTitle>Counter</PageTitle>
+<PageTitle>Counter</PageTitle>
 
+<body style="background: @configuracao.CorFundo;">
     <h1 style="font-size: @configuracao.TamanhoFonte;">Counter</h1>
 
     <p role="status">Current count: @currentCount</p>
 
     <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 </body>
+
+<div style="display: flex;">
+    <span style="margin: 23px 5px;">Selecione a cor</span>
+    <div style="width: 150px;">
+        <select @bind="@configuracao.CorFundo" class="form-control" style="margin-top: 15px;">
+            <option value="lightgreen">Verde</option>
+            <option value="white">Branco</option>
+            <option value="red">Vermelho</option>
+            <option value="orange">Laranja</option>
+        </select>
+    </div>
+
+    <span style="margin: 23px 5px;">Selecione o tamanho da fonte</span>
+    <div style="width: 150px;">
+        <select @bind="@configuracao.TamanhoFonte" class="form-control" style="margin-top: 15px;">
+            <option value="1em">1</option>
+            <option value="2em">2</option>
+            <option value="3em">3</option>
+            <option value="4em">4</option>
+        </select>
+    </div>
+</div>
 
 @code {
     private int currentCount = 0;
@@ -20,4 +42,4 @@
 
     [CascadingParameter]
     public Config configuracao { get; set; }
-}
+    }

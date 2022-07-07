@@ -2,8 +2,8 @@
 {
     public class Config
     {
-        public string CorFundo { get; set; } = "Yellow";
+        public string CorFundo { get; set; } = "lightgreen";
 
-        public string TamanhoFonte { get; set; } = "4em";
+        public string TamanhoFonte { get; set; } = "1em";
     }
 }

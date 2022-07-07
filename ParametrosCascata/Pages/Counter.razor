@@ -1,0 +1,23 @@
+﻿@page "/counter"
+
+<body style="background: @configuracao.CorFundo;">
+    <PageTitle>Counter</PageTitle>
+
+    <h1 style="font-size: @configuracao.TamanhoFonte;">Counter</h1>
+
+    <p role="status">Current count: @currentCount</p>
+
+    <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+</body>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    [CascadingParameter]
+    public Config configuracao { get; set; }
+}

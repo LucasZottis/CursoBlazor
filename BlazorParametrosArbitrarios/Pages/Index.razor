@@ -1,0 +1,16 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<Home Titulo="Bem vindo a loja do Lucas" @attributes="MeusParametros">
+
+</Home>
+
+@code {
+    public Dictionary<string, object> MeusParametros { get; set; } = new Dictionary<string, object>
+    {
+        {"src", "~/LOGO PICHAU.png"},
+        {"alt", "Meus produtos"},
+        {"class", "img-fluid"}
+    };
+}

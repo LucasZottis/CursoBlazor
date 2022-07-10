@@ -1,8 +1,6 @@
 ﻿<div>
     <label>Nova tarefa</label>
-    <br>
     <input type="text" placeholder="Informe a tarefa" @bind="DescricaoNovaTarefa">
-    <br>
     <button class="btn btn-primary" @onclick="( () => AdicionarTarefa.InvokeAsync( DescricaoNovaTarefa ) )">Cadastrar tarefa</button>
 </div>
 

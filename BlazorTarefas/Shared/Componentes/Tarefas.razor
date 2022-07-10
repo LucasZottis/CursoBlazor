@@ -2,6 +2,11 @@
 
 <h1>@Titulo</h1>
 
+@if ( ListaTarefas != null )
+{
+    <NovaTarefa AdicionarTarefa="AdicionarNovaTarefa" DescricaoNovaTarefa="_novaTarefa"></NovaTarefa>
+}
+
 @if ( ListaTarefas == null )
 {
     <Alerta Mensagem=" Carregando..." TipoMensagem="TipoMensagem.Aviso"></Alerta>
@@ -25,26 +30,28 @@ else
             @foreach ( Tarefa item in ListaTarefas )
             {
                 <tr>
-                    <TarefaIndividual Item="@item" RemoverTarefaIndividual="RemoverTarefa" AlterarEstadoTarefaIndividual="AlterarEstadoTarefa"></TarefaIndividual>
+                    <TarefaIndividual Item="@item" RemoverTarefaIndividual="ConfirmarRemocaoTarefa" AlterarEstadoTarefaIndividual="AlterarEstadoTarefa"></TarefaIndividual>
                 </tr>
             }
         </tbody>
     </table>
 }
 
-@if ( ListaTarefas != null )
-{
-    <NovaTarefa AdicionarTarefa="AdicionarNovaTarefa" DescricaoNovaTarefa="_novaTarefa"></NovaTarefa>
-}
+<Confirmar @ref="confirmacao" Titulo="Excluir tarefa?" AoCancelar="CancelarRemocaoTarefa" AoConfirmar="RemoverTarefa" >
+    <div>Deseja excluir esta tarefa?</div>
+</Confirmar>
 
 @code {
     private string _novaTarefa = "";
+    Confirmar confirmacao;
 
     [Parameter]
     public List<Tarefa> ListaTarefas { get; set; }
 
     [Parameter]
     public string Titulo { get; set; }
+
+    Tarefa _tarefaRemovida;
 
     private static int totalTarefas = 0;
 
@@ -60,32 +67,38 @@ else
                 } );
 
             _novaTarefa = "";
-            totalTarefas = ListaTarefas.Count;
-
-            //await js.InvokeVoidAsync( "getTotalTarefas" );
-            await js.InvokeVoidAsync( "getTotalTarefasInstancia", DotNetObjectReference.Create( this ) );
         }
 
         descricaoTarefa = string.Empty;
     }
 
-    private async Task RemoverTarefa( Tarefa tarefa )
+    private void ConfirmarRemocaoTarefa( Tarefa tarefa )
     {
-        if ( tarefa == null )
+        confirmacao.Exibir();
+        _tarefaRemovida = tarefa;
+    }
+
+    private void RemoverTarefa()
+    {
+        if ( _tarefaRemovida == null )
         {
             return;
         }
 
-        if ( tarefa.Concluida )
+        if ( _tarefaRemovida.Concluida )
         {
             return;
         }
 
-        if ( ( ( IJSInProcessRuntime ) js ).Invoke<bool>( "confirm", "Deseja excluir a tarefa?" ) )
-        {
-            ListaTarefas.Remove( tarefa );
-            await js.InvokeAsync<object>( "MostraAlerta", "Tarefa excluída com sucesso!" );
-        }
+        ListaTarefas.Remove( _tarefaRemovida );
+        confirmacao.Fechar();
+        _tarefaRemovida = null;
+    }
+
+    private void CancelarRemocaoTarefa()
+    {
+        confirmacao.Fechar();
+        _tarefaRemovida = null;
     }
 
     private void AlterarEstadoTarefa( Tarefa tarefa )
@@ -98,15 +111,13 @@ else
         tarefa.Concluida = !tarefa.Concluida;
     }
 
-    [JSInvokable]
-    public Task<int> ObterTotalTarefasInstancia()
+    private void AoCancelar()
     {
-        return Task.FromResult( totalTarefas );
+
     }
 
-    [JSInvokable]
-    public static Task<int> ObterTotalTarefas()
+    private void AoConfirmar()
     {
-        return Task.FromResult( totalTarefas );
+
     }
 }

@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorLayout", "BlazorLayou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParametrosCascata", "ParametrosCascata\ParametrosCascata.csproj", "{E2D3FC94-7486-49DC-8428-D514813735FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorParametrosArbitrarios", "BlazorParametrosArbitrarios\BlazorParametrosArbitrarios.csproj", "{11DEFAD8-D945-42E4-9F7F-DEAA0F6B96B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorParametrosArbitrarios", "BlazorParametrosArbitrarios\BlazorParametrosArbitrarios.csproj", "{11DEFAD8-D945-42E4-9F7F-DEAA0F6B96B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
